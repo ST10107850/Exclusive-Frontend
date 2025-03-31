@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/uploads/header-logo.svg";
+import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   return (
@@ -12,24 +13,24 @@ export const Navbar = () => {
         <nav className="flex items-center space-x-6">
           <ul className="flex space-x-4 text-3">
             <li>
-              <a href="/" className="text-white">
+              <Link to="/" className="text-white">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/" className="text-white">
+              <Link to="/shops" className="text-white">
                 Shop
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/" className="text-white">
+              <Link to="/about" className="text-white">
                 About
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/" className="text-white">
+              <Link to="/contact" className="text-white">
                 Contact
-              </a>
+              </Link>
             </li>
           </ul>
 
