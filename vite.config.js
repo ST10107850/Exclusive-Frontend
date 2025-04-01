@@ -4,8 +4,14 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  server:{
-    port:3000,
+  server: {
+    port: 3000,
+    proxy: {
+      "/api": {
+        target: "https://exlusive-app-8.onrender.com",
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [react(), tailwindcss()],
 });
