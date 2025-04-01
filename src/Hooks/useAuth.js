@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLoginMutation } from "../Api/authApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setCredentials } from "../Api/apiSlice"; 
+import { setCredentials } from "../Api/apiSlice";
 
 export const useAuth = () => {
   const [error, setError] = useState("");
@@ -35,7 +35,7 @@ export const useAuth = () => {
       const response = await login(
         { email, password },
         {
-          headers: { "Content-Type": "application/json" }, // ✅ Ensures JSON format
+          headers: { "Content-Type": "application/json" },
         }
       ).unwrap();
 
@@ -49,8 +49,6 @@ export const useAuth = () => {
       navigate("/");
     } catch (err) {
       console.error("Login Error:", err);
-
-      // Handle specific errors
       let errorMessage = "Something went wrong.";
       if (err?.originalStatus === 401) {
         errorMessage = "Invalid email or password.";

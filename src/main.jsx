@@ -14,6 +14,7 @@ import { ContactPage } from "./Pages/ContactPage.jsx";
 import { LoginPage } from "./Pages/LoginPage.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store.js";
+import { ProductDetailsPage } from "./Pages/ProductDetailsPage.jsx";
 
 
 const router = createBrowserRouter(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
         <Route path="/" element={<Homepage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="product-details" element={<ProductDetailsPage/>}/>
       </Route>
     </Route>
   )
