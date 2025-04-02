@@ -3,13 +3,9 @@ import product from "../assets/uploads/product-01-400x434.jpg";
 
 export const ProductCard = () => {
   return (
-    <div className="max-w-xs">
+    <div className="max-w-[480px] justify-self-center">
       <div className="w-[386.66px] h-[429px]">
-        <img
-          src={product}
-          alt="Zen Bamboo Grove"
-          className="w-full h-full object-container "
-        />
+        <img src={product} alt="Zen Bamboo Grove" className="w-full h-full  " />
       </div>
       <div className="p-4">
         <p className="text-lg mb-3">☆☆☆☆☆ </p>

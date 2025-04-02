@@ -15,24 +15,27 @@ import { LoginPage } from "./Pages/LoginPage.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store.js";
 import { ProductDetailsPage } from "./Pages/ProductDetailsPage.jsx";
+import { CartPage } from "./Pages/CartPage.jsx";
+import { ShopPage } from "./Pages/ShopPage.jsx";
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="/login" element={<LoginPage />} />
       <Route element={<MainLayout />}>
         <Route path="/" element={<Homepage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="product-details" element={<ProductDetailsPage/>}/>
-      </Route>
+        <Route path="product-details" element={<ProductDetailsPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/cart" element={<CartPage/>}/>
+        <Route path="/shops" element={<ShopPage/>}/>
+      </Route> 
     </Route>
   )
 );
 
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
   <Provider store={store}>
     <RouterProvider router={router} />
   </Provider>

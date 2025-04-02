@@ -1,110 +1,170 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/uploads/header-logo.svg";
-import { Link } from "react-router-dom";
+import logo1 from "../assets/uploads/normal-header.svg";
+import { Link, useLocation } from "react-router-dom";
+import { Circle, CircleX, Heart, Minus, Plus } from "lucide-react";
 
 export const Navbar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+
+  const handleQuantityChange = (type) => {
+    setQuantity((prev) =>
+      type === "increase" ? prev + 1 : Math.max(1, prev - 1)
+    );
+  };
+
+  const useAlternateStyle = !["/", "/about", "/contact"].includes(currentPath);
+  const logoToUse = useAlternateStyle ? logo1 : logo;
+  const textColor = useAlternateStyle ? "text-black" : "text-white";
+  const positionClass = useAlternateStyle
+    ? "relative bg-white shadow-md"
+    : "absolute bg-transparent";
+
+  const cartBackgound = useAlternateStyle ? "text-button" : " text-white ";
+  const quantityToUse = useAlternateStyle ? "bg-button" : "bg-white";
+
   return (
-    <div className=" absolute top-0 left-0 w-full bg-transparent z-20">
-      <div className="mx-[140.4px] px-4 py-3 flex justify-between items-center">
-        <a href="/">
-          <img src={logo} alt="Home" className="h-10" />
-        </a>
+    <>
+      {/* NAVBAR */}
+      <div className={`top-0 left-0 w-full z-20 ${positionClass}`}>
+        <div className="mx-[140.4px] px-4 py-3 flex justify-between items-center">
+          <a href="/">
+            <img src={logoToUse} alt="Home" className="h-10" />
+          </a>
 
-        <nav className="flex items-center space-x-6">
-          <ul className="flex space-x-4 text-3">
-            <li>
-              <Link to="/" className="text-white">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/shops" className="text-white">
-                Shop
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" className="text-white">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="text-white">
-                Contact
-              </Link>
-            </li>
-          </ul>
+          <nav className="flex items-center space-x-6">
+            <ul className={`flex space-x-4 text-3 ${textColor}`}>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/shops">Shop</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+              <li>
+                <Link to="/contact">Contact</Link>
+              </li>
 
-          {/* <div className="flex space-x-3">
-            <a
-              href="#"
-              aria-label="Facebook"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition duration-300"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                className="w-5 h-5"
-                fill="currentColor"
+              {/* CART ICON */}
+              <i
+                className="relative inline-block cursor-pointer"
+                onClick={() => setIsCartOpen(true)} // Open Cart on Click
               >
-                <path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"></path>
-              </svg>
-            </a>
+                <span className="inline-block w-6 h-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="826 826 140 140"
+                    className={`w-full h-full fill-current ${cartBackgound}`}
+                  >
+                    <path d="M960.758,934.509l2.632,23.541c0.15,1.403-0.25,2.657-1.203,3.761c-0.953,1.053-2.156,1.579-3.61,1.579H833.424  c-1.454,0-2.657-0.526-3.61-1.579c-0.952-1.104-1.354-2.357-1.203-3.761l2.632-23.541H960.758z M953.763,871.405l6.468,58.29H831.77  l6.468-58.29c0.15-1.203,0.677-2.218,1.58-3.045c0.903-0.827,1.981-1.241,3.234-1.241h19.254v9.627c0,2.658,0.94,4.927,2.82,6.807  s4.149,2.82,6.807,2.82c2.658,0,4.926-0.94,6.807-2.82s2.821-4.149,2.821-6.807v-9.627h28.882v9.627  c0,2.658,0.939,4.927,2.819,6.807c1.881,1.88,4.149,2.82,6.807,2.82s4.927-0.94,6.808-2.82c1.879-1.88,2.82-4.149,2.82-6.807v-9.627  h19.253c1.255,0,2.332,0.414,3.235,1.241C953.086,869.187,953.612,870.202,953.763,871.405z M924.881,857.492v19.254  c0,1.304-0.476,2.432-1.429,3.385s-2.08,1.429-3.385,1.429c-1.303,0-2.432-0.477-3.384-1.429c-0.953-0.953-1.43-2.081-1.43-3.385  v-19.254c0-5.315-1.881-9.853-5.641-13.613c-3.76-3.761-8.298-5.641-13.613-5.641s-9.853,1.88-13.613,5.641  c-3.761,3.76-5.641,8.298-5.641,13.613v19.254c0,1.304-0.476,2.432-1.429,3.385c-0.953,0.953-2.081,1.429-3.385,1.429  c-1.303,0-2.432-0.477-3.384-1.429c-0.953-0.953-1.429-2.081-1.429-3.385v-19.254c0-7.973,2.821-14.779,8.461-20.42  c5.641-5.641,12.448-8.461,20.42-8.461c7.973,0,14.779,2.82,20.42,8.461C922.062,842.712,924.881,849.519,924.881,857.492z"></path>
+                  </svg>
+                  </span>
 
-            <a
-              href="#"
-              aria-label="Instagram"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-5 h-5 rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white hover:opacity-80 transition duration-300"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512"
-                className="w-5 h-5"
-                fill="currentColor"
-              >
-                <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8z"></path>
-              </svg>
-            </a>
-
-            <a
-              href="#"
-              aria-label="YouTube"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-5 h-5 rounded-full text-white hover:bg-red-700 transition duration-300"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 576 512"
-                className="w-5 h-5"
-                fill="currentColor"
-              >
-                <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zM232.145 337.591V175.185l142.739 81.205-142.739 81.201z"></path>
-              </svg>
-            </a>
-
-            <a
-              href="#"
-              aria-label="Twitter"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center w-5 h-5 rounded-full text-white hover:bg-blue-500 transition duration-300"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                className="w-5 h-5"
-                fill="currentColor"
-              >
-                <path d="M18.244 2.25H21.552L14.325 10.51L22.827 21.75H16.17L10.956 14.933L4.99 21.75H1.68L9.41 12.915L1.254 2.25H8.08L12.793 8.481L18.244 2.25ZM17.083 19.77H18.916L7.084 4.126H5.117L17.083 19.77Z"></path>
-              </svg>
-            </a>
-          </div> */}
-        </nav>
+                {/* CART BADGE */}
+                <span
+                  className={`absolute -top-2 -right-2 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ${quantityToUse}`}
+                >
+                  2
+                </span>
+              </i>
+            </ul>
+          </nav>
+        </div>
       </div>
-    </div>
+
+      <div
+        className={`fixed top-0 right-0 w-[30vw] h-screen bg-white shadow-lg transform ${
+          isCartOpen ? "translate-x-0" : "translate-x-full"
+        } transition-transform duration-300 ease-in-out z-30 flex flex-col`}
+      >
+        {/* HEADER */}
+        <div className="border-b border-gray-400 p-5 relative">
+          <button
+            className="absolute top-5 right-5 text-base hover:cursor-pointer"
+            onClick={() => setIsCartOpen(false)}
+          >
+            ✖
+          </button>
+
+          <h2 className="text-base font-instrument text-gray-500">
+            Shopping Cart
+          </h2>
+        </div>
+
+        {/* CART ITEMS */}
+        <div className="p-5 text-[#6b6262] flex justify-between items-center overflow-y-auto">
+          <div className="flex flex-row space-x-4">
+            <img
+              src="https://websitedemos.net/flower-shop-04/wp-content/uploads/sites/1414/2023/10/product-9.jpg"
+              alt=""
+              className="w-20 h-20"
+            />
+
+            <div className=" space-y-4">
+              <h2 className="text-primary font-bold hover:cursor-pointer">
+                Wedding Flower Bouquet
+              </h2>
+              <div className="flex items-center justify-center space-x-0 border border-gray-300 w-1/2 h-1/2">
+                <button
+                  className="bg-primaryColor text-gray-400 text-xl flex items-center border-r border-gray-300 justify-center font-bold w-10 h-10 hover:cursor-pointer"
+                  onClick={() => handleQuantityChange("decrease")}
+                >
+                  <Minus className="w-5 h-5" />
+                </button>
+                <span className="w-10 h-10 flex text-base text-secondary items-center border-r border-gray-300 justify-center bg-secondaryColor">
+                  {quantity}
+                </span>
+                <button
+                  className="bg-primaryColor text-gray-400 flex items-center justify-center font-bold w-10 h-10 hover:cursor-pointer"
+                  onClick={() => handleQuantityChange("increase")}
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-end space-y-6">
+            <CircleX className="hover:cursor-pointer" />
+            <p>R100.00</p>
+          </div>
+        </div>
+
+        {/* BOTTOM BUTTONS */}
+        <div className="absolute bottom-0 left-0 w-full py-5 bg-white shadow-lg">
+          <div className="border-b border-t border-gray-400 p-4 flex justify-between items-center">
+            <h2 className="text-base font-bold text-primary">Subtotal:</h2>
+            <p className="text-base text-gray-500">R1000</p>
+          </div>
+          <div className="p-5">
+            <a
+              href="/cart"
+              onClick={() => setIsCartOpen(false)}
+              className="bg-button text-white px-5 py-2 rounded-full w-full block text-center mr-2 hover:cursor-pointer"
+            >
+              View Cart
+            </a>
+            <Link
+              onClick={() => setIsCartOpen(false)}
+              className="bg-button text-white px-5 py-2 rounded-full w-full block text-center mt-4 hover:cursor-pointer"
+            >
+              Checkout
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {isCartOpen && (
+        <div
+          className="fixed inset-0 bg-transparent bg-opacity-100 z-20"
+          onClick={() => setIsCartOpen(false)}
+        ></div>
+      )}
+    </>
   );
 };

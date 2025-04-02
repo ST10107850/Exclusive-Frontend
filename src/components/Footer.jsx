@@ -4,7 +4,7 @@ import logo from "../assets/uploads/normal-header.svg";
 
 export const Footer = () => {
   return (
-    <div className="">
+    <div className="bg-background ">
       <div
         className="relative w-full flex-col py-24 h-auto bg-cover bg-center flex items-center justify-center text-white"
         style={{

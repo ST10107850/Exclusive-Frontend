@@ -40,9 +40,9 @@ export const ProductDetailsPage = () => {
   };
 
   return (
-    <div className="flex flex-col px-20">
-      <div className="flex gap-7 my-20 h-[70vh]  w-full border-4 ">
-        <div className="flex flex-col  w-[10%] justify-between">
+    <div className="flex flex-col mx-[120px] px-20">
+      <div className="flex gap-7 my-20 h-[70vh]  w-full  ">
+        <div className="flex flex-col  w-[17%] justify-between">
           {product.images.map((src, index) => (
             <div
               key={index}
@@ -58,7 +58,7 @@ export const ProductDetailsPage = () => {
           ))}
         </div>
 
-        <div className="relative flex justify-center items-center border-4 w-[40%]">
+        <div className="relative flex justify-center items-center  w-[60%]">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -73,13 +73,13 @@ export const ProductDetailsPage = () => {
           <img
             src={mainImage}
             alt="Large product"
-            className="w-full h-full object-cover border border-yellow-400"
+            className="size-full object-cover "
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           />
         </div>
 
-        <div className=" space-y-5 border ">
+        <div className=" space-y-5 ">
           <p className="text-[#777777] text-sm">Home /Shop/ Golden Glow</p>
           {/* Category Name */}
           <p className="text-button text-base">Indoor Plant</p>

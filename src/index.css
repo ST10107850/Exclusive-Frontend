@@ -5,10 +5,11 @@
 @theme {
   --font-instrument: "Instrument", sans-serif;
   --font-inter: "Inter", sans-serif;
-  --color-button: #88AD35;
+  --color-button: #88ad35;
 
-  --color-primary : #22222;
-  --color-secondary: #454545
+  --color-primary: #22222;
+  --color-secondary: #454545;
+  --color-background: #ecf4d3;
 }
 
 @layer base {
