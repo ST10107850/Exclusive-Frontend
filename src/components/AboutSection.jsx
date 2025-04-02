@@ -36,7 +36,7 @@ const features = [
 
 export const AboutSection = () => {
   return (
-    <div className="container w-full py-16">
+    <div className="w-full py-16">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center pb-24 mx-[120.4px] px-20">
         <div className="w-full">
           <img
@@ -80,7 +80,7 @@ export const AboutSection = () => {
                   </svg>
                 </div>
 
-                <div className="flex flex-col items-start pl-7">
+                <div className="flex flex-col items-start pl-7 text-left">
                   <h4 className="text-lg font-semibold text-gray-800">
                     {feature.title}
                   </h4>

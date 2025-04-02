@@ -25,7 +25,7 @@ export const FlashSales = () => {
         </p>
       </div>
       <a
-        href="#"
+        href="/shops"
         className="border border-white text-white text-[16px] px-8 py-4 rounded-full shadow-lg hover:scale-105 transform transition-all duration-300 ease-in-out "
       >
         Shop Now

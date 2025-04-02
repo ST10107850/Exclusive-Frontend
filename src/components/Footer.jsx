@@ -28,7 +28,7 @@ export const Footer = () => {
           </p>
         </div>
         <a
-          href="#"
+          href="/shops"
           className="bg-button text-white text-[16px] px-8 py-4 rounded-full shadow-lg hover:scale-105 transform transition-all duration-300 ease-in-out "
         >
           Shop Now
@@ -46,17 +46,17 @@ export const Footer = () => {
             </a>
           </li>
           <li>
-            <a href="/" className="text-black">
+            <a href="/shops" className="text-black">
               Shop
             </a>
           </li>
           <li>
-            <a href="/" className="text-black">
+            <a href="/about" className="text-black">
               About
             </a>
           </li>
           <li>
-            <a href="/" className="text-black">
+            <a href="/contact" className="text-black">
               Contact
             </a>
           </li>

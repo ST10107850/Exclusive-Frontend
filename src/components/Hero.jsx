@@ -24,7 +24,7 @@ export const Hero = () => {
         </h1>
       </div>
       <a
-        href="#"
+        href="/shops"
         className="bg-button text-white text-[16px] px-8 py-4 rounded-full shadow-lg hover:scale-105 transform transition-all duration-300 ease-in-out mt-6"
       >
         Shop Now
