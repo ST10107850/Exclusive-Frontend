@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Heart, Minus, Plus } from "lucide-react";
 import { FaCartPlus } from "react-icons/fa";
+import { useCart } from "../Hooks/useCart";
 
-const product = {
-  images: [
-    "https://websitedemos.net/flower-shop-04/wp-content/uploads/sites/1414/2023/10/product-9.jpg",
-    "https://websitedemos.net/flower-shop-04/wp-content/uploads/sites/1414/2023/10/product-22-768x768.jpg",
-    "https://websitedemos.net/flower-shop-04/wp-content/uploads/sites/1414/2023/10/product-11-768x768.jpg",
-    "https://websitedemos.net/generic-ecommerce-02/wp-content/uploads/sites/1526/2025/03/product-04.jpg",
-  ],
-};
-
-export const ProductDetails = () => {
-  const [mainImage, setMainImage] = useState(product.images[0]);
+export const ProductDetails = ({ product }) => {
+  const [mainImage, setMainImage] = useState(null);
   const [zoomStyle, setZoomStyle] = useState({ display: "none" });
   const [quantity, setQuantity] = useState(1);
+
+  const { addToCart } = useCart();
+
+  useEffect(() => {
+    if (product?.ImageUri?.length) {
+      setMainImage(product.ImageUri[0]);
+    }
+  }, [product]);
+
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart(product._id, quantity);
+    }
+  };
 
   const handleMouseMove = (e) => {
     const { left, top, width, height } = e.target.getBoundingClientRect();
@@ -42,7 +48,7 @@ export const ProductDetails = () => {
     <div className="flex flex-col mx-[120px] px-20 my-20">
       <div className="flex gap-7 my-10 h-[70vh]  w-full  ">
         <div className="flex flex-col  w-[17%] justify-between">
-          {product.images.map((src, index) => (
+          {product.ImageUri?.map((src, index) => (
             <div
               key={index}
               className="flex justify-center items-center  cursor-pointer"
@@ -51,13 +57,13 @@ export const ProductDetails = () => {
               <img
                 src={src}
                 alt={`Product thumbnail ${index + 1}`}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             </div>
           ))}
         </div>
 
-        <div className="relative flex justify-center items-center  w-[60%]">
+        <div className="relative flex justify-center items-center h-full  w-[70%]">
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -72,29 +78,31 @@ export const ProductDetails = () => {
           <img
             src={mainImage}
             alt="Large product"
-            className="size-full object-cover "
+            className="size-full object-container"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           />
         </div>
 
-        <div className=" space-y-5 ">
-          <p className="text-[#777777] text-sm">Home /Shop/ Golden Glow</p>
+        <div className=" space-y-5 w-full">
+          <p className="text-[#777777] text-sm">
+            Home /Shop/ {product?.productName?.slice(0, 20)}...
+            {product?.productName?.length > 20 ? "..." : ""}
+          </p>
           {/* Category Name */}
-          <p className="text-button text-base">Indoor Plant</p>
-          <h1 className="text-xl font-bold text-primary">Golden Glow</h1>
+          <p className="text-button text-base">
+            {product.categoryId?.categoryName}
+          </p>
+          <h1 className="text-xl font-bold text-primary w-full break-words overflow-hidden">
+            {product.productName}
+          </h1>
           <h1 className="text-base text-secondary">
-            <span className="text-2xl ">R100.00</span> & Free Shipping
+            <span className="text-2xl ">R{product.price} </span> & Free Shipping
           </h1>
 
-          <p className="text-secondary">
-            Faucibus lacus tincidunt molestie accumsan nibh non odio aenean
-            molestie purus tristique sed tempor consequat risus tellus amet
-            augue egestas mauris scelerisque donec ultrices.
-          </p>
-          <p className="text-secondary">
-            Sollicitudin facilisis massa pellentesque in ultrices enim nunc ac
-            egestas elementum ut in ornare sit malesuada.
+          <p className="text-secondary w-full break-words overflow-hidden">
+            {product?.description?.slice(0, 500)}ltrices enim nunc ac egestas
+            elementum ut in ornare sit malesuada.
           </p>
 
           <div className="flex items-center gap-4 border-b pb-4 border-gray-300">
@@ -117,8 +125,8 @@ export const ProductDetails = () => {
             </div>
             <div className="flex gap-4">
               <button
-                //   onClick={handleAddToCart}
-                className="bg-button text-primary px-6 py-2 flex space-x-3 items-center text-xl hover:cursor-pointer transition rounded-md"
+                onClick={handleAddToCart}
+                className="bg-button text-primary px-6 py-2 flex space-x-3 items-center text-xl hover:cursor-pointer transition rounded-full"
               >
                 <FaCartPlus />
                 <p>Add to Cart</p>
@@ -133,7 +141,8 @@ export const ProductDetails = () => {
           </div>
 
           <p className="text-button">
-            <span className="text-secondary">Categories: </span> Indoor Plant
+            <span className="text-secondary">Categories: </span>{" "}
+            {product.categoryId?.categoryName}
           </p>
 
           <div className="">

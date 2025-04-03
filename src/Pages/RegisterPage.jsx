@@ -1,10 +1,9 @@
 import React from "react";
-import { useState } from "react";
 import images1 from "../assets/uploads/product-05-400x434.jpg";
 import { useRegister } from "../Hooks/useRegister";
+import { OTPVerificationModal } from "../Components/OTPVerificationModal";
 
 export const RegisterPage = () => {
-
   const {
     email,
     setEmail,
@@ -14,9 +13,9 @@ export const RegisterPage = () => {
     setConfirmPassword,
     handleSubmit,
     error,
-    loading,
+    showOTPModal,
+    setShowOTPModal,
   } = useRegister();
-
 
   return (
     <div className="flex h-[75vh] my-20">
@@ -31,7 +30,7 @@ export const RegisterPage = () => {
       <div className="md:w-1/2 w-full flex items-center justify-center">
         <div className="max-w-sm w-full">
           <h2 className="text-3xl font-bold uppercase text-primaryColor text-center mb-8">
-            Welcome Back!
+            Register Your Account
           </h2>
 
           {error && <p className="text-red-500 text-center">{error}</p>}
@@ -48,10 +47,10 @@ export const RegisterPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 "
                 placeholder="Enter your email"
+                required
               />
             </div>
 
-            {/* Password Input */}
             <div className="mb-4">
               <label className="block text-black mb-2" htmlFor="password">
                 Password
@@ -63,44 +62,43 @@ export const RegisterPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your password"
+                required
               />
             </div>
 
-            {/* Password Input */}
             <div className="mb-4">
-              <label className="block text-black mb-2" htmlFor="password">
+              <label
+                className="block text-black mb-2"
+                htmlFor="confirmPassword"
+              >
                 Confirm Password
               </label>
               <input
-                type="conpasss"
-                id="conpass"
+                type="password"
+                id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Enter your password"
+                placeholder="Confirm your password"
+                required
               />
-            </div>
-
-            <div className="flex justify-end mb-4">
-              <a href="#" className="text-blue-600 hover:underline text-sm">
-                Forgot Password?
-              </a>
             </div>
 
             <button
               type="submit"
               className="w-full bg-button text-white py-2 transition mb-4"
             >
-              Sign In
-            </button>
-
-            <button
-              type="button"
-              className="w-full flex items-center justify-center border py-2 hover:bg-gray-100 transition"
-            >
-              Sign In with Google
+              Register
             </button>
           </form>
+
+          {showOTPModal && (
+            <OTPVerificationModal
+              email={email}
+              show={showOTPModal}
+              onClose={() => setShowOTPModal(false)}
+            />
+          )}
         </div>
       </div>
     </div>

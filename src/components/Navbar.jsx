@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/uploads/header-logo.svg";
 import logo1 from "../assets/uploads/normal-header.svg";
 import { Link, useLocation } from "react-router-dom";
 import { Circle, CircleX, Heart, Minus, Plus } from "lucide-react";
+import { useCart } from "../Hooks/useCart";
 
 export const Navbar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
+   const [cartLength, setCartLength] = useState(0);
+
+  const {cart} = useCart();
+
+   useEffect(() => {
+     if (cart && cart.items) {
+       setCartLength(cart.items?.length);
+     }
+   }, [cart?.items?.length]);
+  
 
   const handleQuantityChange = (type) => {
     setQuantity((prev) =>
@@ -69,7 +80,7 @@ export const Navbar = () => {
                 <span
                   className={`absolute -top-2 -right-2 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ${quantityToUse}`}
                 >
-                  2
+                  {cartLength}
                 </span>
               </i>
             </ul>

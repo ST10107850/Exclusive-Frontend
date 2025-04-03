@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCredentials } from "../Api/apiSlice";
@@ -7,23 +7,13 @@ import { useRegisterUserMutation } from "../Api/authApiSlice";
 export const useRegister = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); 
-  const [error, setError] = useState(""); 
-  const [loading, setLoading] = useState(false); 
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showOTPModal, setShowOTPModal] = useState(false);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const [registerUser] = useRegisterUserMutation();
-    const { userInfo } = useSelector((state) => state.auth);
-
-    useEffect(() => {
-      if (userInfo) {
-        console.log("User logged in, navigating...");
-        navigate("/login");
-      }
-    }, [navigate, userInfo]);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,23 +23,25 @@ export const useRegister = () => {
       return;
     }
 
-    const payload = { email, password , confirmPassword};
     setLoading(true);
     setError("");
 
     try {
-      const response = await registerUser(payload).unwrap();
+      const response = await registerUser({
+        email,
+        password,
+        confirmPassword,
+      }).unwrap();
 
-      console.log(response);
       dispatch(setCredentials(response.data));
-
-      alert(response.status)
-      navigate("/login"); 
+      alert("Registration successful! Please verify your email.");
+      setShowOTPModal(true);
     } catch (err) {
-      console.error("Error:", err.data.message || err);
-      setError(err.message || "Registration failed."); 
+      console.error("Error:", err?.data?.message || err);
+      setError(err?.data?.message || "Registration failed.");
+      alert(err?.data?.message);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -62,6 +54,8 @@ export const useRegister = () => {
     setConfirmPassword,
     handleSubmit,
     error,
-    loading, // For showing a loading spinner or similar indicator
+    loading,
+    showOTPModal,
+    setShowOTPModal,
   };
 };
