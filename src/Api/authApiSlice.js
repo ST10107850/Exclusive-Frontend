@@ -1,3 +1,4 @@
+import { LogOut } from "lucide-react";
 import { userApiSlice } from "./userApiSlice";
 
 const USER_URL = "/api/users";
@@ -11,8 +12,21 @@ export const authApiSlice = userApiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: `${USER_URL}/logout`,
+        method: "POST",
+      }),
+    }),
+
+    registerUser: builder.mutation({
+      query: (data)=>({
+        url: `${USER_URL}`,
+        method: "POST",
+        body: data
+      })
+    })
   }),
-  overrideExisting: false,
 });
 
-export const { useLoginMutation } = authApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterUserMutation } = authApiSlice;

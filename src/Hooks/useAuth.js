@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { setCredentials } from "../Api/apiSlice";
 
 export const useAuth = () => {
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [login] = useLoginMutation();
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [login] = useLoginMutation();
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -20,8 +22,8 @@ export const useAuth = () => {
     }
   }, [navigate, userInfo]);
 
-  const loginHandler = async (email, password) => {
-    setError("");
+  const loginHandler = async (e) => {
+    e.preventDefault();
 
     if (!email || !password) {
       setError("Please fill in all fields.");
@@ -29,41 +31,23 @@ export const useAuth = () => {
       return;
     }
 
+    const payload = { email, password };
+    setError("");
+
     try {
-      console.log("Attempting login with:", email, password);
+      const res = await login(payload).unwrap();
 
-      const response = await login(
-        { email, password },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      ).unwrap();
+      console.log("Login user: ", res.data);
 
-      console.log("API Response:", response);
-      if (!response || !response.data) {
-        throw new Error("Invalid response from server");
-      }
-
-      dispatch(setCredentials({ ...response.data }));
+      dispatch(setCredentials({ ...res.data }));
       alert("Login successful!");
+
       navigate("/");
     } catch (err) {
       console.error("Login Error:", err);
-      let errorMessage = "Something went wrong.";
-      if (err?.originalStatus === 401) {
-        errorMessage = "Invalid email or password.";
-      } else if (err?.status === "PARSING_ERROR") {
-        errorMessage = "Server error: Please check API response format.";
-      } else if (err?.data?.message) {
-        errorMessage = err.data.message;
-      } else if (err?.error) {
-        errorMessage = err.error;
-      }
-
-      setError(errorMessage);
-      alert(errorMessage);
+      alert(err.data.message || err.error || "Something went wrong.");
     }
   };
 
-  return { login: loginHandler, error };
+  return {  loginHandler, error, email, setEmail, password, setPassword };
 };
