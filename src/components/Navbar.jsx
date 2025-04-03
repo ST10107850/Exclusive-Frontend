@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import logo from "../assets/uploads/header-logo.svg";
 import logo1 from "../assets/uploads/normal-header.svg";
 import { Link, useLocation } from "react-router-dom";
@@ -10,16 +10,12 @@ export const Navbar = () => {
   const currentPath = location.pathname;
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
-   const [cartLength, setCartLength] = useState(0);
+  const [cartLength, setCartLength] = useState(0);
 
-  const {cart} = useCart();
+  const { cart } = useCart();
+  const cartItems = useMemo(() => cart?.items || [], [cart]);
 
-   useEffect(() => {
-     if (cart && cart.items) {
-       setCartLength(cart.items?.length);
-     }
-   }, [cart?.items?.length]);
-  
+  const itemCount = cartItems.length;
 
   const handleQuantityChange = (type) => {
     setQuantity((prev) =>
@@ -74,13 +70,12 @@ export const Navbar = () => {
                   >
                     <path d="M960.758,934.509l2.632,23.541c0.15,1.403-0.25,2.657-1.203,3.761c-0.953,1.053-2.156,1.579-3.61,1.579H833.424  c-1.454,0-2.657-0.526-3.61-1.579c-0.952-1.104-1.354-2.357-1.203-3.761l2.632-23.541H960.758z M953.763,871.405l6.468,58.29H831.77  l6.468-58.29c0.15-1.203,0.677-2.218,1.58-3.045c0.903-0.827,1.981-1.241,3.234-1.241h19.254v9.627c0,2.658,0.94,4.927,2.82,6.807  s4.149,2.82,6.807,2.82c2.658,0,4.926-0.94,6.807-2.82s2.821-4.149,2.821-6.807v-9.627h28.882v9.627  c0,2.658,0.939,4.927,2.819,6.807c1.881,1.88,4.149,2.82,6.807,2.82s4.927-0.94,6.808-2.82c1.879-1.88,2.82-4.149,2.82-6.807v-9.627  h19.253c1.255,0,2.332,0.414,3.235,1.241C953.086,869.187,953.612,870.202,953.763,871.405z M924.881,857.492v19.254  c0,1.304-0.476,2.432-1.429,3.385s-2.08,1.429-3.385,1.429c-1.303,0-2.432-0.477-3.384-1.429c-0.953-0.953-1.43-2.081-1.43-3.385  v-19.254c0-5.315-1.881-9.853-5.641-13.613c-3.76-3.761-8.298-5.641-13.613-5.641s-9.853,1.88-13.613,5.641  c-3.761,3.76-5.641,8.298-5.641,13.613v19.254c0,1.304-0.476,2.432-1.429,3.385c-0.953,0.953-2.081,1.429-3.385,1.429  c-1.303,0-2.432-0.477-3.384-1.429c-0.953-0.953-1.429-2.081-1.429-3.385v-19.254c0-7.973,2.821-14.779,8.461-20.42  c5.641-5.641,12.448-8.461,20.42-8.461c7.973,0,14.779,2.82,20.42,8.461C922.062,842.712,924.881,849.519,924.881,857.492z"></path>
                   </svg>
-                  </span>
+                </span>
 
-                {/* CART BADGE */}
                 <span
                   className={`absolute -top-2 -right-2 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ${quantityToUse}`}
                 >
-                  {cartLength}
+                  {itemCount}
                 </span>
               </i>
             </ul>
@@ -109,35 +104,51 @@ export const Navbar = () => {
 
         {/* CART ITEMS */}
         <div className="p-5 text-[#6b6262] flex justify-between items-center overflow-y-auto">
-          <div className="flex flex-row space-x-4">
-            <img
-              src="https://websitedemos.net/flower-shop-04/wp-content/uploads/sites/1414/2023/10/product-9.jpg"
-              alt=""
-              className="w-20 h-20"
-            />
+          <div className="flex flex-col space-y-4">
+            {cart?.items?.length > 0 ? (
+              cart.items.map((item) => {
+                if (!item?.product) return null;
 
-            <div className=" space-y-4">
-              <h2 className="text-primary font-bold hover:cursor-pointer">
-                Wedding Flower Bouquet
-              </h2>
-              <div className="flex items-center justify-center space-x-0 border border-gray-300 w-1/2 h-1/2">
-                <button
-                  className="bg-primaryColor text-gray-400 text-xl flex items-center border-r border-gray-300 justify-center font-bold w-10 h-10 hover:cursor-pointer"
-                  onClick={() => handleQuantityChange("decrease")}
-                >
-                  <Minus className="w-5 h-5" />
-                </button>
-                <span className="w-10 h-10 flex text-base text-secondary items-center border-r border-gray-300 justify-center bg-secondaryColor">
-                  {quantity}
-                </span>
-                <button
-                  className="bg-primaryColor text-gray-400 flex items-center justify-center font-bold w-10 h-10 hover:cursor-pointer"
-                  onClick={() => handleQuantityChange("increase")}
-                >
-                  <Plus className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
+                const price = parseFloat(item.product?.price) || 0;
+                const quantity = parseInt(item.quantity, 10) || 0;
+                const itemSubtotal = (price * quantity).toFixed(2);
+
+                return (
+                  <div className="flex items-center space-x-4 justify-between" key={item._id}>
+                    <img
+                      src="https://websitedemos.net/flower-shop-04/wp-content/uploads/sites/1414/2023/10/product-9.jpg"
+                      alt=""
+                      className="w-20 h-20"
+                    />
+
+                    <div className="flex flex-col space-x-4 space-y-4">
+                      <h2 className="text-primary font-bold hover:cursor-pointer">
+                        Wedding Flower Bouquet
+                      </h2>
+                      <div className="flex items-center justify-center space-x-0 border border-gray-300 w-1/2 h-1/2">
+                        <button
+                          className="bg-primaryColor text-gray-400 text-xl flex items-center border-r border-gray-300 justify-center font-bold w-10 h-10 hover:cursor-pointer"
+                          onClick={() => handleQuantityChange("decrease")}
+                        >
+                          <Minus className="w-5 h-5" />
+                        </button>
+                        <span className="w-10 h-10 flex text-base text-secondary items-center border-r border-gray-300 justify-center bg-secondaryColor">
+                          {quantity}
+                        </span>
+                        <button
+                          className="bg-primaryColor text-gray-400 flex items-center justify-center font-bold w-10 h-10 hover:cursor-pointer"
+                          onClick={() => handleQuantityChange("increase")}
+                        >
+                          <Plus className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center text-secondary">No items in cart</div>
+            )}
           </div>
 
           <div className="flex flex-col items-end space-y-6">
