@@ -2,9 +2,10 @@ import { CircleX, Minus, Plus } from "lucide-react";
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../Hooks/useCart";
+import { Loading } from "./Loading";
 
 export const Cart = () => {
-  const { cart, updateCartItems, removeCartItem } = useCart();
+  const { cart, updateCartItems, removeCartItem, isLoading } = useCart();
   const cartItems = useMemo(() => cart?.items || [], [cart]);
 
   const { subtotal, total } = useMemo(() => {
@@ -38,7 +39,19 @@ export const Cart = () => {
             </tr>
           </thead>
           <tbody>
-            {cartItems.length > 0 ? (
+            {isLoading ? (
+              <tr>
+                <td
+                  colSpan="4"
+                  className="text-center p-4 bg-transparent"
+                >
+                  <div className="flex justify-center items-center space-x-2 ">
+                    <div className="w-8 h-8 border-4 border-t-4 border-gray-200 rounded-full animate-spin border-primaryColor"></div>
+                    <span>Loading...</span>
+                  </div>
+                </td>
+              </tr>
+            ) : cartItems.length > 0 ? (
               cartItems.map((item) => {
                 if (!item?.product) return null;
 
@@ -48,7 +61,10 @@ export const Cart = () => {
                 return (
                   <tr key={item._id} className="border-b border-gray-300">
                     <td className="flex flex-row space-x-4 items-center p-4">
-                      <CircleX className="text-gray-400 hover:cursor-pointer" onClick={() => removeCartItem(item._id)} />
+                      <CircleX
+                        className="text-gray-400 hover:cursor-pointer"
+                        onClick={() => removeCartItem(item._id)}
+                      />
                       <img
                         src={item.product?.ImageUri}
                         alt={item.product.productName}

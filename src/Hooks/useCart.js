@@ -1,33 +1,44 @@
 import { useEffect, useState } from "react";
-import { useGetCartQuery } from "../Api/cartSlice";
+import {
+  useGetCartQuery,
+  useAddToCartMutation,
+  useUpdateCartQuantityMutation,
+  useRemoveFromCartMutation,
+} from "../Api/cartSlice";
 
 export const useCart = () => {
   const [cart, setCart] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { data, isSuccess } = useGetCartQuery();
+  const [addToCartMutation] = useAddToCartMutation();
+  const [updateCartQuantity] = useUpdateCartQuantityMutation();
+  const [removeFromCartMutation] = useRemoveFromCartMutation();
 
   const addToCart = async (product, quantity) => {
     try {
-      const res = await fetch(`/api/cart`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ items: [{ product, quantity }] }),
-      });
+      setIsLoading(true);
 
-      if (!res.ok) {
-        throw new Error("Failed to add to cart");
+      const response = await addToCartMutation({
+        items: [{ product, quantity }],
+      }).unwrap();
+
+      console.log("Add to cart response:", response);
+      if (response?.error) {
+        throw new Error(response.error);
       }
-      await res.json();
       alert("Product added to cart successfully!");
     } catch (error) {
-      console.log("Error:", error.message);
-      alert("Failed to add product to cart. Please try again.");
+      console.log("Error:", error);
+      alert("Failed to add product to cart.");
+    } finally {
+      setTimeout(() => setIsLoading(false), 1000);
+      window.location.reload();
     }
   };
 
   useEffect(() => {
+    // setIsLoading(true);
     if (
       isSuccess &&
       data &&
@@ -42,7 +53,8 @@ export const useCart = () => {
     } else {
       setCart({ items: [] });
     }
-  }, [data, isSuccess]);
+    // setTimeout(() => setIsLoading(false), 1000);
+  }, [data, isSuccess, isLoading]);
 
   const updateCartItems = async (itemId, newQuantity) => {
     if (newQuantity < 1) {
@@ -51,18 +63,11 @@ export const useCart = () => {
     }
 
     try {
-      const res = await fetch(`/api/cart/${itemId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ quantity: newQuantity }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to update cart item");
-      }
-      await res.json();
+      setIsLoading(true);
+      await updateCartQuantity({
+        id: itemId,
+        quantity: newQuantity,
+      }).unwrap();
 
       setCart((prevCart) => {
         const updatedItems = prevCart.items.map((item) =>
@@ -70,33 +75,41 @@ export const useCart = () => {
         );
         return { ...prevCart, items: updatedItems };
       });
+
       alert("Cart item updated successfully!");
     } catch (error) {
       console.log("Error:", error.message);
       alert("Failed to update cart item. Please try again.");
+    } finally {
+      setTimeout(() => setIsLoading(false), 1000);
     }
   };
 
   const removeCartItem = async (itemId) => {
     try {
-      const res = await fetch(`/api/cart/${itemId}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to remove cart item");
-      }
-      await res.json();
+      setIsLoading(true);
+      await removeFromCartMutation(itemId).unwrap();
 
       setCart((prevCart) => ({
         ...prevCart,
         items: prevCart.items.filter((item) => item._id !== itemId),
       }));
+
       alert("Cart item removed successfully!");
     } catch (error) {
       console.log("Error:", error.message);
       alert("Failed to remove cart item. Please try again.");
+    } finally {
+      setTimeout(() => setIsLoading(false), 1000);
+      window.location.reload();
     }
   };
-  return { addToCart, cart, updateCartItems, removeCartItem };
+
+  return {
+    addToCart,
+    cart,
+    updateCartItems,
+    removeCartItem,
+    isLoading,
+  };
 };

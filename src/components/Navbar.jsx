@@ -4,40 +4,31 @@ import logo1 from "../assets/uploads/normal-header.svg";
 import { Link, useLocation } from "react-router-dom";
 import { Circle, CircleX, Heart, Minus, Plus } from "lucide-react";
 import { useCart } from "../Hooks/useCart";
+import { Loading } from "./Loading";
 
 export const Navbar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [quantity, setQuantity] = useState(1);
 
-  const { cart } = useCart();
-  const cartItemsCount = cart.length || 0; 
+  const { cart, updateCartItems, removeCartItem, isLoading } = useCart();
+  const cartItemsCount = cart.items?.length;
   const cartItems = useMemo(() => cart?.items || [], [cart]);
-  console.log(cartItemsCount);
-  
+
   const { subtotal } = useMemo(() => {
-      let subtotal = 0;
-  
-      cartItems.forEach((item) => {
-        const price = parseFloat(item.product?.price) || 0;
-        const quantity = parseInt(item.quantity, 10) || 0;
-        const itemSubtotal = price * quantity;
-        subtotal += itemSubtotal;
-      });
-  
-      return {
-        subtotal: subtotal.toFixed(2),
-      };
-    }, [cart]);
+    let subtotal = 0;
 
-  const itemCount = 0;
+    cartItems.forEach((item) => {
+      const price = parseFloat(item.product?.price) || 0;
+      const quantity = parseInt(item.quantity, 10) || 0;
+      const itemSubtotal = price * quantity;
+      subtotal += itemSubtotal;
+    });
 
-  const handleQuantityChange = (type) => {
-    setQuantity((prev) =>
-      type === "increase" ? prev + 1 : Math.max(1, prev - 1)
-    );
-  };
+    return {
+      subtotal: subtotal.toFixed(2),
+    };
+  }, [cartItems]);
 
   const useAlternateStyle = !["/", "/about", "/contact"].includes(currentPath);
   const logoToUse = useAlternateStyle ? logo1 : logo;
@@ -51,7 +42,14 @@ export const Navbar = () => {
 
   return (
     <>
-      {/* NAVBAR */}
+      {isLoading && (
+        <div className="flex justify-center items-center space-x-2 h-screen w-full opacity-50 bg-black fixed inset-0 z-50  bg-opacity-100">
+          <div className="w-8 h-8 border-4 border-t-4 border-gray-200 rounded-full animate-spin border-primaryColor"></div>
+          <p className="text-primaryColor font-semibold">
+            Updating quantity.....
+          </p>
+        </div>
+      )}
       <div className={`top-0 left-0 w-full z-20 ${positionClass}`}>
         <div className="mx-[140.4px] px-4 py-3 flex justify-between items-center">
           <a href="/">
@@ -73,10 +71,9 @@ export const Navbar = () => {
                 <Link to="/contact">Contact</Link>
               </li>
 
-              {/* CART ICON */}
               <i
                 className="relative inline-block cursor-pointer"
-                onClick={() => setIsCartOpen(true)} // Open Cart on Click
+                onClick={() => setIsCartOpen(true)}
               >
                 <span className="inline-block w-6 h-6">
                   <svg
@@ -91,7 +88,7 @@ export const Navbar = () => {
                 <span
                   className={`absolute -top-2 -right-2 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center ${quantityToUse}`}
                 >
-                  {itemCount}
+                  {cartItemsCount}
                 </span>
               </i>
             </ul>
@@ -118,7 +115,6 @@ export const Navbar = () => {
           </h2>
         </div>
 
-        {/* CART ITEMS */}
         <div className="p-5 text-[#6b6262] flex justify-between items-center overflow-y-auto">
           <div className="flex flex-col space-y-4 w-full">
             {cart?.items?.length > 0 ? (
@@ -149,7 +145,9 @@ export const Navbar = () => {
                         <div className="flex items-center justify-center space-x-0 border border-gray-300 w-1/2 h-1/2">
                           <button
                             className="bg-primaryColor text-gray-400 text-xl flex items-center border-r border-gray-300 justify-center font-bold w-10 h-10 hover:cursor-pointer"
-                            onClick={() => handleQuantityChange("decrease")}
+                            onClick={() =>
+                              updateCartItems(item._id, quantity - 1)
+                            }
                           >
                             <Minus className="w-5 h-5" />
                           </button>
@@ -158,7 +156,9 @@ export const Navbar = () => {
                           </span>
                           <button
                             className="bg-primaryColor text-gray-400 flex items-center justify-center font-bold w-10 h-10 hover:cursor-pointer"
-                            onClick={() => handleQuantityChange("increase")}
+                            onClick={() =>
+                              updateCartItems(item._id, quantity + 1)
+                            }
                           >
                             <Plus className="w-5 h-5" />
                           </button>
@@ -166,7 +166,10 @@ export const Navbar = () => {
                       </div>
                     </div>
                     <div className="flex flex-col items-end space-y-6">
-                      <CircleX className="hover:cursor-pointer" />
+                      <CircleX
+                        className="hover:cursor-pointer"
+                        onClick={() => removeCartItem(item._id)}
+                      />
                       <p>{itemSubtotal}</p>
                     </div>
                   </div>
