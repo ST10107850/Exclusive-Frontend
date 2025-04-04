@@ -1,32 +1,25 @@
-import { LogOut } from "lucide-react";
-import { userApiSlice } from "./userApiSlice";
+import { createSlice } from "@reduxjs/toolkit";
 
-const USER_URL = "/api/users";
+const initialState = {
+  userInfo: localStorage.getItem("userInfo")
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : null,
+};
 
-export const authApiSlice = userApiSlice.injectEndpoints({
-  endpoints: (builder) => ({
-    login: builder.mutation({
-      query: (data) => ({
-        url: `${USER_URL}/auth`,
-        method: "POST",
-        body: data,
-      }),
-    }),
-    logout: builder.mutation({
-      query: () => ({
-        url: `${USER_URL}/logout`,
-        method: "POST",
-      }),
-    }),
-
-    registerUser: builder.mutation({
-      query: (data)=>({
-        url: `${USER_URL}`,
-        method: "POST",
-        body: data
-      })
-    })
-  }),
+const authApiSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    setCredentials: (state, action) => {
+      state.userInfo = action.payload;
+      localStorage.setItem("userInfo", JSON.stringify(action.payload));
+    },
+    logout: (state) => {
+      state.userInfo = null;
+      localStorage.removeItem("userInfo");
+    },
+  },
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterUserMutation } = authApiSlice;
+export const { setCredentials, logout } = authApiSlice.actions;
+export default authApiSlice.reducer;

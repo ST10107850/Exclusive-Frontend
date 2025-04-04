@@ -44,6 +44,11 @@ export const ProductDetails = ({ product }) => {
       type === "increase" ? prev + 1 : Math.max(1, prev - 1)
     );
   };
+
+  if (!product) {
+    return <p>Loading...</p>; // Or any loading indicator you prefer
+  }
+
   return (
     <div className="flex flex-col mx-[120px] px-20 my-20">
       <div className="flex gap-7 my-10 h-[70vh]  w-full  ">
@@ -206,3 +211,4 @@ export const ProductDetails = ({ product }) => {
     </div>
   );
 };
+

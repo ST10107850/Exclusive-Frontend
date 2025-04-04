@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-export const ProductCard = ({ id, image, productName, categoryName, price }) => {
+export const ProductCard = ({
+  id,
+  image,
+  productName,
+  categoryName,
+  price,
+}) => {
   // const [isHearted, setIsHearted] = useState(false);
 
   // Toggle heart for wishlist
@@ -14,13 +20,13 @@ export const ProductCard = ({ id, image, productName, categoryName, price }) => 
       <div className="relative w-[386.66px] h-[429px]">
         {/* Image */}
         <Link to={`/product/${id}`}>
-        <img
-          src={image}
-          alt="Zen Bamboo Grove"
-          className="w-full h-full object-container hover:cursor-pointer"
-        />
+          <img
+            src={image}
+            alt="Zen Bamboo Grove"
+            className="w-full h-full object-container hover:cursor-pointer"
+          />
         </Link>
-    
+
         {/* <div className="absolute top-0 left-0 cursor-pointer inset-0 flex justify-center items-center opacity-0 hover:opacity-100 transition-opacity duration-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +37,6 @@ export const ProductCard = ({ id, image, productName, categoryName, price }) => 
           </svg>
         </div> */}
 
-    
         {/* <div
           className="absolute top-2 right-2 cursor-pointer"
           onClick={toggleWishlist}
@@ -54,9 +59,16 @@ export const ProductCard = ({ id, image, productName, categoryName, price }) => 
       <div className="p-4">
         <p className="text-lg mb-3">☆☆☆☆☆</p>
         <h1 className="text-base font-medium font-inter text-primary mb-2">
-          {productName.slice(0, 30)}...
-          {productName.length > 20 ? "..." : ""}
+          {productName ? (
+            <>
+              {productName.slice(0, 30)}
+              {productName.length > 20 ? "..." : ""}
+            </>
+          ) : (
+            "No Name"
+          )}
         </h1>
+
         <p className="text-sm text-secondary font-light mb-2">{categoryName}</p>
         <h2 className="text-lg font-bold text-secondary mb-2">R{price}</h2>
       </div>

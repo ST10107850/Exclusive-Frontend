@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ProductCard } from "../Cards/ProductCard";
 import { useLocation } from "react-router-dom";
 import { useProducts } from "../Hooks/useProducts";
@@ -9,11 +9,7 @@ export const Tranding = () => {
   const itemsPerPage = 6;
 
   const { products, fetchProducts, totalPages, currentPage, setCurrentPage } =
-    useProducts();
-
-  useEffect(() => {
-    fetchProducts(currentPage, itemsPerPage);
-  }, [currentPage]);
+    useProducts(itemsPerPage);
 
  
   const handlePageChange = (newPage) => {

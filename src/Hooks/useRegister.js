@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { setCredentials } from "../Api/apiSlice";
-import { useRegisterUserMutation } from "../Api/authApiSlice";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../Api/authApiSlice";
+import { useRegisterUserMutation } from "../Api/userApiSlice";
 
 export const useRegister = () => {
   const [email, setEmail] = useState("");

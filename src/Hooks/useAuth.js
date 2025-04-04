@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useLoginMutation } from "../Api/authApiSlice";
+import { useLoginMutation } from "../Api/userApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setCredentials } from "../Api/apiSlice";
+import { setCredentials } from "../Api/authApiSlice";
 
 export const useAuth = () => {
   const [email, setEmail] = useState("");

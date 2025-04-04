@@ -87,7 +87,7 @@ export const CheckOut = () => {
                     name="deliveryOption"
                     checked={deliveryOption === "delivery"}
                     onChange={() => setDeliveryOption("delivery")}
-                    className="mr-2"
+                    className="mr-2 accent-green-600"
                   />
                   <FaTruck className="mr-2 text-xl" />
                   Get It Delivered
@@ -99,7 +99,7 @@ export const CheckOut = () => {
                     name="deliveryOption"
                     checked={deliveryOption === "pickup"}
                     onChange={() => setDeliveryOption("pickup")}
-                    className="mr-2"
+                    className="mr-2 accent-green-600"
                   />
                   <FaShoppingBag className="mr-2 text-xl" />
                   Pickup Available in Stores
@@ -107,7 +107,6 @@ export const CheckOut = () => {
               </div>
             </div>
 
-            {/* Shipping Address */}
             <h2 className="text-xl font-semibold text-secondary mt-6 mb-2">
               Shipping Address
             </h2>
@@ -124,7 +123,6 @@ export const CheckOut = () => {
               ))}
             </select>
 
-            {/* Payment Options */}
             <h2 className="text-xl font-semibold text-secondary mt-6 mb-2">
               Payment Options
             </h2>
@@ -135,7 +133,7 @@ export const CheckOut = () => {
                   name="paymentOption"
                   value="card"
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="mr-2"
+                  className="mr-2 accent-green-600"
                 />
                 Card
               </label>
@@ -145,7 +143,7 @@ export const CheckOut = () => {
                   name="paymentOption"
                   value="cash"
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="mr-2"
+                  className="mr-2 accent-green-600"
                 />
                 Cash on Delivery
               </label>

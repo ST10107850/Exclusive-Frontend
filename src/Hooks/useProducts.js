@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGetProductsQuery } from "../Api/useProductSlice";
 
 export const useProducts = () => {
   const [products, setProducts] = useState([]);
@@ -6,32 +7,20 @@ export const useProducts = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchProducts = async (page = 1, limit = 6) => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `/api/product?currentPage=${page}&limit=${limit}&sortBy=createdAt&sortOrder=desc`
-      );
+  const {data, isSuccess} = useGetProductsQuery({page :currentPage, limit: 6});
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-
-      const data = await response.json();
+  useEffect(() => {
+    if (isSuccess && data) {
       setProducts(data.data);
       setTotalPages(data.totalPages);
-      setCurrentPage(data.currentPage);
-      
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    } finally {
       setLoading(false);
+    } else {
+      setLoading(true);
     }
-  };
+  }, [isSuccess, data]);
 
   return {
     products,
-    fetchProducts,
     loading,
     totalPages,
     currentPage,

@@ -1,13 +1,10 @@
-import React, {  useEffect } from 'react'
+import React from 'react'
 import {CategoryCard} from "../Cards/CategoryCard.jsx"
 import { useCategories } from '../Hooks/useCategories.js';
 export const Categories = () => {
 
-  const {categories, fetchCategories} = useCategories();
+  const {categories} = useCategories();
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   return (
     <div className="flex flex-col pt-[120.4px] mb-base pb-20 mx-[120px] px-10 justify-center items-center">

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import logo from "../assets/uploads/header-logo.svg";
 import logo1 from "../assets/uploads/normal-header.svg";
 import { Link, useLocation } from "react-router-dom";
@@ -10,12 +10,28 @@ export const Navbar = () => {
   const currentPath = location.pathname;
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [cartLength, setCartLength] = useState(0);
 
   const { cart } = useCart();
+  const cartItemsCount = cart.length || 0; 
   const cartItems = useMemo(() => cart?.items || [], [cart]);
+  console.log(cartItemsCount);
+  
+  const { subtotal } = useMemo(() => {
+      let subtotal = 0;
+  
+      cartItems.forEach((item) => {
+        const price = parseFloat(item.product?.price) || 0;
+        const quantity = parseInt(item.quantity, 10) || 0;
+        const itemSubtotal = price * quantity;
+        subtotal += itemSubtotal;
+      });
+  
+      return {
+        subtotal: subtotal.toFixed(2),
+      };
+    }, [cart]);
 
-  const itemCount = cartItems.length;
+  const itemCount = 0;
 
   const handleQuantityChange = (type) => {
     setQuantity((prev) =>
@@ -104,7 +120,7 @@ export const Navbar = () => {
 
         {/* CART ITEMS */}
         <div className="p-5 text-[#6b6262] flex justify-between items-center overflow-y-auto">
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 w-full">
             {cart?.items?.length > 0 ? (
               cart.items.map((item) => {
                 if (!item?.product) return null;
@@ -114,34 +130,44 @@ export const Navbar = () => {
                 const itemSubtotal = (price * quantity).toFixed(2);
 
                 return (
-                  <div className="flex items-center space-x-4 justify-between" key={item._id}>
-                    <img
-                      src="https://websitedemos.net/flower-shop-04/wp-content/uploads/sites/1414/2023/10/product-9.jpg"
-                      alt=""
-                      className="w-20 h-20"
-                    />
+                  <div
+                    className="flex items-center justify-between space-x-4 "
+                    key={item._id}
+                  >
+                    <div className="flex items-center space-x-4">
+                      <img
+                        src={item.product?.ImageUri}
+                        alt="Product Image"
+                        className="w-20 h-20"
+                      />
 
-                    <div className="flex flex-col space-x-4 space-y-4">
-                      <h2 className="text-primary font-bold hover:cursor-pointer">
-                        Wedding Flower Bouquet
-                      </h2>
-                      <div className="flex items-center justify-center space-x-0 border border-gray-300 w-1/2 h-1/2">
-                        <button
-                          className="bg-primaryColor text-gray-400 text-xl flex items-center border-r border-gray-300 justify-center font-bold w-10 h-10 hover:cursor-pointer"
-                          onClick={() => handleQuantityChange("decrease")}
-                        >
-                          <Minus className="w-5 h-5" />
-                        </button>
-                        <span className="w-10 h-10 flex text-base text-secondary items-center border-r border-gray-300 justify-center bg-secondaryColor">
-                          {quantity}
-                        </span>
-                        <button
-                          className="bg-primaryColor text-gray-400 flex items-center justify-center font-bold w-10 h-10 hover:cursor-pointer"
-                          onClick={() => handleQuantityChange("increase")}
-                        >
-                          <Plus className="w-5 h-5" />
-                        </button>
+                      <div className="flex flex-col space-x-4 space-y-4">
+                        <h2 className="text-primary font-bold hover:cursor-pointer">
+                          {item.product?.productName.slice(0, 20)}...
+                          {item.product?.productName.length > 20 && "..."}{" "}
+                        </h2>
+                        <div className="flex items-center justify-center space-x-0 border border-gray-300 w-1/2 h-1/2">
+                          <button
+                            className="bg-primaryColor text-gray-400 text-xl flex items-center border-r border-gray-300 justify-center font-bold w-10 h-10 hover:cursor-pointer"
+                            onClick={() => handleQuantityChange("decrease")}
+                          >
+                            <Minus className="w-5 h-5" />
+                          </button>
+                          <span className="w-10 h-10 flex text-base text-secondary items-center border-r border-gray-300 justify-center bg-secondaryColor">
+                            {item.quantity}
+                          </span>
+                          <button
+                            className="bg-primaryColor text-gray-400 flex items-center justify-center font-bold w-10 h-10 hover:cursor-pointer"
+                            onClick={() => handleQuantityChange("increase")}
+                          >
+                            <Plus className="w-5 h-5" />
+                          </button>
+                        </div>
                       </div>
+                    </div>
+                    <div className="flex flex-col items-end space-y-6">
+                      <CircleX className="hover:cursor-pointer" />
+                      <p>{itemSubtotal}</p>
                     </div>
                   </div>
                 );
@@ -150,18 +176,13 @@ export const Navbar = () => {
               <div className="text-center text-secondary">No items in cart</div>
             )}
           </div>
-
-          <div className="flex flex-col items-end space-y-6">
-            <CircleX className="hover:cursor-pointer" />
-            <p>R100.00</p>
-          </div>
         </div>
 
         {/* BOTTOM BUTTONS */}
         <div className="absolute bottom-0 left-0 w-full py-5 bg-white shadow-lg">
           <div className="border-b border-t border-gray-400 p-4 flex justify-between items-center">
             <h2 className="text-base font-bold text-primary">Subtotal:</h2>
-            <p className="text-base text-gray-500">R1000</p>
+            <p className="text-base text-gray-500">R{subtotal}</p>
           </div>
           <div className="p-5">
             <a

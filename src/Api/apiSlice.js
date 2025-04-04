@@ -1,25 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const initialState = {
-  userInfo: localStorage.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : null,
-};
+const baseQuery = fetchBaseQuery({ baseUrl: " " });
 
-const apiSlice = createSlice({
-  name: "auth",
-  initialState,
-  reducers: {
-    setCredentials: (state, action) => {
-      state.userInfo = action.payload;
-      localStorage.setItem("userInfo", JSON.stringify(action.payload));
-    },
-    logout: (state) => {
-      state.userInfo = null;
-      localStorage.removeItem("userInfo");
-    },
-  },
+export const apiSlice = createApi({
+  baseQuery,
+  tagTypes: ["Users", "Categories", "Products", "Orders"],
+  endpoints: () => [],
 });
-
-export const { setCredentials, logout } = apiSlice.actions;
-export default apiSlice.reducer;

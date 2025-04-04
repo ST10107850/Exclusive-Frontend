@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useGetCartQuery } from "../Api/cartSlice";
 
 export const useCart = () => {
   const [cart, setCart] = useState([]);
+
+  const { data, isSuccess } = useGetCartQuery();
 
   const addToCart = async (product, quantity) => {
     try {
@@ -16,7 +19,7 @@ export const useCart = () => {
       if (!res.ok) {
         throw new Error("Failed to add to cart");
       }
-      const data = await res.json();
+      await res.json();
       alert("Product added to cart successfully!");
     } catch (error) {
       console.log("Error:", error.message);
@@ -25,30 +28,21 @@ export const useCart = () => {
   };
 
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await fetch(`/api/cart`);
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch cart");
-        }
-        const data = await res.json();
-        if (data && data[0] && Array.isArray(data[0].items)) {
-          const filteredItems = data[0].items.filter(
-            (item) => item.product !== null
-          );
-          setCart({ ...data[0], items: filteredItems });
-        } else {
-          setCart(data[0]);
-          console.log("No valid items found in the cart.");
-        }
-      } catch (error) {
-        console.log("Error:", error.message);
-      }
-    };
-
-    fetchCart();
-  }, []);
+    if (
+      isSuccess &&
+      data &&
+      Array.isArray(data) &&
+      data.length > 0 &&
+      Array.isArray(data[0].items)
+    ) {
+      const filteredItems = data[0].items.filter(
+        (item) => item.product !== null
+      );
+      setCart({ ...data[0], items: filteredItems });
+    } else {
+      setCart({ items: [] });
+    }
+  }, [data, isSuccess]);
 
   const updateCartItems = async (itemId, newQuantity) => {
     if (newQuantity < 1) {
@@ -68,7 +62,7 @@ export const useCart = () => {
       if (!res.ok) {
         throw new Error("Failed to update cart item");
       }
-     await res.json();
+      await res.json();
 
       setCart((prevCart) => {
         const updatedItems = prevCart.items.map((item) =>
@@ -82,7 +76,6 @@ export const useCart = () => {
       alert("Failed to update cart item. Please try again.");
     }
   };
-
 
   const removeCartItem = async (itemId) => {
     try {

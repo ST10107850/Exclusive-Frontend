@@ -1,22 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGetCategoriesQuery } from "../Api/useCategorySlice";
 
 export const useCategories = () => {
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const fetchCategories = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/category");
-      const data = await response.json();
+  const { data, isSuccess } = useGetCategoriesQuery();
+
+  useEffect(() => {
+    if (isSuccess && data) {
       setCategories(data.data);
-      
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    } finally {
       setLoading(false);
     }
-  };
+  }, [isSuccess, data]);
 
-  return { categories, fetchCategories, loading };
+  return {
+    categories,
+    loading,
+  };
 };
