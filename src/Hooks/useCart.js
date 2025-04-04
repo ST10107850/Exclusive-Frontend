@@ -38,7 +38,6 @@ export const useCart = () => {
   };
 
   useEffect(() => {
-    // setIsLoading(true);
     if (
       isSuccess &&
       data &&
@@ -52,8 +51,8 @@ export const useCart = () => {
       setCart({ ...data[0], items: filteredItems });
     } else {
       setCart({ items: [] });
+      
     }
-    // setTimeout(() => setIsLoading(false), 1000);
   }, [data, isSuccess, isLoading]);
 
   const updateCartItems = async (itemId, newQuantity) => {

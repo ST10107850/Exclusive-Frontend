@@ -196,6 +196,7 @@ export const Navbar = () => {
               View Cart
             </a>
             <Link
+              to={"/checkout"}
               onClick={() => setIsCartOpen(false)}
               className="bg-button text-white px-5 py-2 rounded-full w-full block text-center mt-4 hover:cursor-pointer"
             >
