@@ -3,7 +3,8 @@ import { ProductCard } from "../Cards/ProductCard";
 import { useLocation } from "react-router-dom";
 import { useProducts } from "../Hooks/useProducts";
 
-export const Tranding = () => {
+
+const Tranding = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const itemsPerPage = 6;
@@ -89,3 +90,5 @@ export const Tranding = () => {
     </div>
   );
 };
+
+export default Tranding;

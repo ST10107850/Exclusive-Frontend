@@ -8,7 +8,7 @@ import { FlashSales } from "../components/FlashSales";
 // import { Footer } from "../components/Footer";
 import { Hero } from "../components/Hero";
 // import { Navbar } from "../components/Navbar";
-import { Tranding } from "../Components/Tranding";
+import Tranding from "../Components/Tranding";
 
 export const Homepage = () => {
   return (
