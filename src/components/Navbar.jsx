@@ -5,15 +5,15 @@ import { Link, useLocation } from "react-router-dom";
 import { CircleX, Minus, Plus } from "lucide-react";
 import { useCart } from "../Hooks/useCart";
 
-const Navbar = () => {
+export const NavBar = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   // const user = localStorage.getItem("userInfo") ;
-  const userInfo  = JSON.parse(localStorage.getItem("userInfo")) || {};
+  const userInfo = JSON.parse(localStorage.getItem("userInfo")) || {};
   console.log(userInfo);
-  
+
   const { cart, updateCartItems, removeCartItem, isLoading } = useCart();
   const cartItemsCount = cart.items?.length;
   const cartItems = useMemo(() => cart?.items || [], [cart]);
@@ -79,7 +79,6 @@ const Navbar = () => {
                 onClick={() => setIsCartOpen(true)}
               >
                 <span className="inline-block w-6 h-6">
-                  
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="826 826 140 140"
@@ -219,5 +218,3 @@ const Navbar = () => {
     </>
   );
 };
-
-export default Navbar;
