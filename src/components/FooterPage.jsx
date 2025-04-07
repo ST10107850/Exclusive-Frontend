@@ -2,7 +2,7 @@ import React from "react";
 import Footer_bg from "../assets/uploads/footer-bg.jpg";
 import logo from "../assets/uploads/normal-header.svg";
 
-export const Footer = () => {
+export const FooterPage = () => {
   return (
     <div className="bg-background ">
       <div
