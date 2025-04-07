@@ -11,7 +11,7 @@ export const Navbar = () => {
   const currentPath = location.pathname;
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const user = localStorage.getItem("userInfo") ;
+  // const user = localStorage.getItem("userInfo") ;
   const userInfo  = JSON.parse(localStorage.getItem("userInfo")) || {};
   console.log(userInfo);
   
