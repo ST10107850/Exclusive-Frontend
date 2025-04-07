@@ -1,5 +1,3 @@
-
-import { Reviews } from "../Components/Reviews";
 import { useFetchProductDetails } from "../Hooks/useFetchProductDetails";
 
 export const ProductDetailsPage = () => {
@@ -8,7 +6,7 @@ export const ProductDetailsPage = () => {
     <div>
     
       {/* <ProductDetails product={product} /> */}
-      <Reviews />
+      {/* <Reviews /> */}
     </div>
   );
 };
