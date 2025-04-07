@@ -35,7 +35,7 @@ export const Footer = () => {
         </a>
       </div>
 
-      <div className="pt-16 pb-6 mx-[120.4px] flex justify-between border-b border-secondary">
+      <div className="pt-16 pb-6 mx-[120.4px] flex justify-between border-b border-gray-400">
         <a href="/">
           <img src={logo} alt="Home" className="h-10" />
         </a>

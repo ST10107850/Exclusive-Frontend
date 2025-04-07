@@ -31,7 +31,7 @@ export const useOrder = () => {
       setError(err.message || "An error occurred while placing the order");
     } finally {
       setTimeout(() => setLoading(false), 1000);
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
