@@ -1,4 +1,4 @@
-import {ProductDetails} from "../Components/ProductDetails";
+
 import { Reviews } from "../Components/Reviews";
 import { useFetchProductDetails } from "../Hooks/useFetchProductDetails";
 
@@ -7,7 +7,7 @@ export const ProductDetailsPage = () => {
   return (
     <div>
     
-      <ProductDetails product={product} />
+      {/* <ProductDetails product={product} /> */}
       <Reviews />
     </div>
   );
