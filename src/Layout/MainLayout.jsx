@@ -6,7 +6,10 @@ import  NavBar  from "../Components/Navbar";
 export const MainLayout = () => (
   <div>
     <NavBar />
-    <Outlet />
+    <main>
+       <Outlet />
+    </main>
+   
     <Footer />
   </div>
 );

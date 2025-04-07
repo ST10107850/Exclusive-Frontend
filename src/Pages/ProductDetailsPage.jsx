@@ -3,7 +3,7 @@ import { Reviews } from "../Components/Reviews";
 import { useFetchProductDetails } from "../Hooks/useFetchProductDetails";
 
 export const ProductDetailsPage = () => {
-  const { product, loading } = useFetchProductDetails();
+  const { product } = useFetchProductDetails();
   return (
     <div>
     
