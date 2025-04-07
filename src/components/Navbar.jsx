@@ -2,9 +2,8 @@ import React, { useMemo, useState } from "react";
 import logo from "../assets/uploads/header-logo.svg";
 import logo1 from "../assets/uploads/normal-header.svg";
 import { Link, useLocation } from "react-router-dom";
-import { Circle, CircleX, Heart, Minus, Plus } from "lucide-react";
+import { CircleX, Minus, Plus } from "lucide-react";
 import { useCart } from "../Hooks/useCart";
-import { Loading } from "./Loading";
 
 export const Navbar = () => {
   const location = useLocation();
