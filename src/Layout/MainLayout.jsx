@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { NavbarPage } from "../Components/NavbarPage";
+import NavbarPage from "../Components/NavbarPage";
 import FooterPage from "../Components/FooterPage";
 
 export const MainLayout = () => (
