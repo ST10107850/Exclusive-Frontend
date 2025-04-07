@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { FooterPage } from "../Components/FooterPage";
 import { NavbarPage } from "../Components/NavbarPage";
+import FooterPage from "../Components/FooterPage";
 
 export const MainLayout = () => (
   <div>
@@ -9,7 +9,6 @@ export const MainLayout = () => (
     <main>
        <Outlet />
     </main>
-   
     <FooterPage />
   </div>
 );
