@@ -1,4 +1,4 @@
-import { ProductDetails } from "../Components/ProductDetails";
+import {ProductDetails} from "../Components/ProductDetails";
 import { Reviews } from "../Components/Reviews";
 import { useFetchProductDetails } from "../Hooks/useFetchProductDetails";
 
