@@ -12,6 +12,7 @@ import { Homepage } from "./Pages/Homepage.jsx";
 import { AboutPage } from "./Pages/AboutPage.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store.js";
+import { ContactPage } from "./Pages/ContactPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
