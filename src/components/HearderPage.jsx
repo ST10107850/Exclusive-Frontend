@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { CircleX, Minus, Plus } from "lucide-react";
 import { useCart } from "../Hooks/useCart";
 
-export const Navbar1 = () => {
+const HearderPage = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -218,3 +218,6 @@ export const Navbar1 = () => {
     </>
   );
 };
+
+
+export default HearderPage;

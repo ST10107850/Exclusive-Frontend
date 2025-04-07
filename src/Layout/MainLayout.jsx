@@ -1,10 +1,10 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { Navbar1 } from "../Components/Navbar1.jsx";
+import HearderPage from "../Components/HearderPage";
 
 export const MainLayout = () => (
   <div>
-    <Navbar1 />
+    <HearderPage />
     <main>
       <Outlet />
     </main>
